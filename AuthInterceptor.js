@@ -19,10 +19,11 @@ export default class AuthInterceptor {
 		return !!(accessToken && refreshToken);
 	}
 
-	authenticate(email, password) {
+	authentificate(email, password) {
 		return new Promise((resolve, reject) => {
 			fetch(`${this.API_URI}/auth/login`, {
 				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
 				body: { email, password }
 			})
 			.then(response => response.json())
@@ -44,6 +45,7 @@ export default class AuthInterceptor {
 		return new Promise((resolve, reject) => {
 			fetch(`${this.API_URI}/auth/refresh`, {
 				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ refreshToken: this.refreshToken })
 			})
 			.then(response => response.json())
@@ -66,10 +68,10 @@ export default class AuthInterceptor {
 			if(!this.accessToken)
 				reject('Authentification required!');
 
-			if(options.body)
-				options.body = { ...options.body, accessToken: this.accessToken }
+			if(options.headers)
+				options.headers = { ...options.headers, 'Authorization': this.accessToken }
 			else
-				options.body = { accessToken: this.accessToken }
+				options.headers = { 'Authorization': this.accessToken }
 
 			fetch(url, options)
 				.then(response => {
