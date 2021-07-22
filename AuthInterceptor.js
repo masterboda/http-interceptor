@@ -23,8 +23,8 @@ export default class AuthInterceptor {
 		return new Promise((resolve, reject) => {
 			fetch(`${this.API_URI}/auth/login`, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: { email, password }
+				headers: { 'Content-Type': 'application/json'},
+				body: JSON.stringify({ email, password })
 			})
 			.then(response => response.json())
 			.then(data => {
